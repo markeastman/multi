@@ -1,0 +1,60 @@
+package uk.me.eastmans.multi.gui.backgroundjobs;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+@Service
+public class SAPProcess {
+
+    private static final Logger log = LoggerFactory.getLogger(SAPProcess.class);
+
+    // Async jobs cannot return a job object which can be cancelled
+    // check out https://vaadin.com/docs/latest/building-apps/deep-dives/application-layer/background-jobs/interaction/callbacks
+    @Async
+    public void executeProcess(Consumer<String> onComplete,
+                               Consumer<Double> onProgress,
+                               Consumer<Exception> onError,
+                               Supplier<Boolean> isCancelled) {
+        // This will start a SAP process which will run in the background
+        // At the moment it just simulates a background task
+        try {
+            for (int i=0; i<10; i++) {
+                Thread.sleep(1000); // Wait second
+                if (isCancelled.get()) // Been cancelled so stop
+                    break;
+                // Randomly check if we should pretend we had an error
+                if (Math.random() > 0.95)
+                    throw new RuntimeException("Error due to random value" );
+                log.info("Executing SAP Process step " + i);
+                onProgress.accept((double)i / 10.0);
+            }
+            if (!isCancelled.get())
+                onComplete.accept("Completed SAP Process");
+        } catch (Exception ex) {
+            onError.accept(ex);
+        }
+    }
+
+    /*
+    public Flux<String> startBackgroundJob() {
+        return Flux.create(
+                sink -> {
+                    try {
+                        for (int i = 0; i < 10; i++) {
+                            Thread.sleep(1000); // Wait second
+                            log.info("Executing SAP background job Process step " + i);
+                            sink.next("Processed " + (double) i / 10.0);
+                        }
+                        sink.complete();
+                    } catch (Exception ex) {
+                        sink.error(ex);
+                    }
+                });
+    }
+     */
+}
