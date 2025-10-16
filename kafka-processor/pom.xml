@@ -13,6 +13,13 @@
 
     <name>Kafka Topic Processor</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>uk.me.eastmans.multi</groupId>
+            <artifactId>entity-model</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>

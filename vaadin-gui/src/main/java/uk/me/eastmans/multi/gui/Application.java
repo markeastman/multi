@@ -4,7 +4,6 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,7 +15,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EntityScan(basePackages ="uk.me.eastmans.multi.em")
 @EnableJpaRepositories("uk.me.eastmans.multi.em")
 @SpringBootApplication
-@ComponentScan(basePackages = "uk.me.eastmans.multi")
 @EnableAsync
 @EnableScheduling
 @Push

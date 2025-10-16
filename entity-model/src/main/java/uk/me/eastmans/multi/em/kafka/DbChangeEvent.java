@@ -1,7 +1,7 @@
 package uk.me.eastmans.multi.em.kafka;
 
 /*
- * The tableName relates to what table was affected
+ * The entityName relates to what entity was affected
  * the operation is one of:
  *     'c' New record created
  *     'u' An existing record updated
@@ -9,4 +9,4 @@ package uk.me.eastmans.multi.em.kafka;
  * the ids is an array of Long values each being a key value in the potentially composite key.
  * Generally the ids length will be one value.
  */
-public record DbChangeEvent (String tableName, String operation, Long[] ids ) {}
+public record DbChangeEvent (String entityName, String operation, Long[] ids ) {}

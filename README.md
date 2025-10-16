@@ -15,7 +15,7 @@ mvn spring-boot:run
 The entity manager packages are prefixed with uk.me.eastmans.multi.em
 and the gui vaadin app is uk.me.eastmans.multi.gui.
 
-## Kafka aspects
+## Kafka aspects background
 https://kafka.apache.org/quickstart
 
 ~~~
@@ -44,3 +44,17 @@ For the example kafka processor you will need to create the topic purchases usin
 ~~~
 bin/kafka-topics.sh --create --topic purchases --bootstrap-server localhost:9092
 ~~~
+
+## Demonstration
+To start with you will need to create a topic called db-events
+~~~
+bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092
+~~~
+
+Once registered and the kafka server is running we can run
+the vaadin gui application. We have added to the UserService 
+the posting of kafka events to the above topic.
+
+To view the topic postings I have implemented DbChangeEventProcessor
+which for now just logs the events to the log file. Ultimately we will want to 
+write handlers for specific entity type postings.

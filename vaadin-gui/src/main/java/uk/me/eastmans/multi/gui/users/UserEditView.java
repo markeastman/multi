@@ -121,7 +121,7 @@ public class UserEditView extends Main implements HasUrlParameter<String> {
         add(scroller);
 
         saveButton = new Button("Save", e -> {
-            // We need to persis the changes back to the database
+            // We need to persist the changes back to the database
             saveOrCreate();
         } );
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -142,7 +142,7 @@ public class UserEditView extends Main implements HasUrlParameter<String> {
         if (user.getId() == null) {
             viewToolbar.setTitle("Create User");
             saveButton.setText("Save");
-            saveButton.setEnabled(false);
+            //saveButton.setEnabled(false);
         }
         this.user = user;
         editBinder.readBean(user);

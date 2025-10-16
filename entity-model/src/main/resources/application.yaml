@@ -1,13 +1,16 @@
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    #properties:
+      #properties:
       #security:
       #  protocol: SASL_SSL
       #sasl:
       #  jaas:
       #    config: org.apache.kafka.common.security.plain.PlainLoginModule required username='< CLUSTER API KEY >' password='< CLUSTER API SECRET >';
-      #  mechanism: PLAIN
+    #  mechanism: PLAIN
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: uk.me.eastmans.multi.em.kafka.DbChangeEventSerde
     consumer:
       group-id: group_id
       auto-offset-reset: earliest
