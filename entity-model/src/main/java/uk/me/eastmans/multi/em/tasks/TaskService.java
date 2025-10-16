@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.me.eastmans.multi.em.kafka.PostKafkaEvent;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -14,8 +15,10 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final PostKafkaEvent postKafkaEvent;
 
-    TaskService(TaskRepository taskRepository) {
+    TaskService(PostKafkaEvent postKafkaEvent, TaskRepository taskRepository) {
+        this.postKafkaEvent = postKafkaEvent;
         this.taskRepository = taskRepository;
     }
 
@@ -27,6 +30,7 @@ public class TaskService {
         Task task = new Task(description, Instant.now());
         task.setDueDate(dueDate);
         taskRepository.saveAndFlush(task);
+        postKafkaEvent.postCreate("Task", task.getId() );
     }
 
     @Transactional(readOnly = true)

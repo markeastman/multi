@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.me.eastmans.multi.em.kafka.PostKafkaEvent;
 
 import java.util.List;
 
@@ -14,10 +15,13 @@ public class PersonaService {
     private final AuthorityRepository authorityRepository;
     private final PersonaRepository personaRepository;
     private final UserRepository userRepository;
+    private final PostKafkaEvent postKafkaEvent;
 
-    PersonaService(AuthorityRepository authorityRepository,
+    PersonaService(PostKafkaEvent postKafkaEvent,
+                   AuthorityRepository authorityRepository,
                    PersonaRepository personaRepository,
                    UserRepository userRepository) {
+        this.postKafkaEvent = postKafkaEvent;
         this.authorityRepository = authorityRepository;
         this.personaRepository = personaRepository;
         this.userRepository = userRepository;
@@ -40,6 +44,7 @@ public class PersonaService {
         }
         personaRepository.delete(persona);
         personaRepository.flush();
+        postKafkaEvent.postDelete("Persona", persona.getId() );
     }
 
     @Transactional(readOnly = true)
@@ -59,6 +64,12 @@ public class PersonaService {
 
     @Transactional
     public void saveOrCreate(Persona persona) {
+        boolean create = persona.getId() == null;
         personaRepository.saveAndFlush(persona);
+        if (create) {
+            postKafkaEvent.postCreate("Persona", persona.getId() );
+        } else {
+            postKafkaEvent.postUpdate("Persona", persona.getId() );
+        }
     }
 }
