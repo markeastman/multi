@@ -40,3 +40,7 @@ This is my second event
 
 rm -rf /tmp/kafka-logs /tmp/kraft-combined-logs
 ~~~
+For the example kafka processor you will need to create the topic purchases using
+~~~
+bin/kafka-topics.sh --create --topic purchases --bootstrap-server localhost:9092
+~~~
